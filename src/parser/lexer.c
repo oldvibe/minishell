@@ -31,7 +31,10 @@ t_token *create_token(t_token_type type, char *value)
     if (!token)
         return (NULL);
     token->type = type;
-    token->value = value ? strdup(value) : NULL;
+    if (value)
+        token->value = strdup(value);
+    else
+        token->value = NULL;
     token->next = NULL;
     return (token);
 }
