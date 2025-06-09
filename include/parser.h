@@ -5,6 +5,7 @@
 
 # include <stdio.h>
 # include <stdlib.h>
+#include "minishell.h"
 # include <unistd.h>
 
 // Token types

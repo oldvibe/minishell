@@ -13,7 +13,6 @@ t_lexer *init_lexer(char *input)
     return (lexer);
 }
 
-// Skip whitespace
 void skip_whitespace(t_lexer *lexer)
 {
     while (lexer->pos < lexer->len &&
@@ -57,12 +56,14 @@ char *read_word(t_lexer *lexer)
         // Handle quotes
         if ((c == '\'' || c == '"') && !quote)
         {
+            printf(" \n<------ l9ina first quote ------->\n");
             quote = c;
             lexer->pos++;
             continue;
         }
         if (c == quote)
         {
+            printf(" \n<-------hna flast quote ----->\n");
             quote = 0;
             lexer->pos++;
             continue;
@@ -70,7 +71,10 @@ char *read_word(t_lexer *lexer)
 
         // If not in quotes and hit special char, stop
         if (!quote && is_special_char(c))
+        {
+            printf(" \n<---- command jdida db ---->\n");
             break;
+        }
 
         lexer->pos++;
     }
@@ -188,9 +192,14 @@ void print_tokens(t_token *tokens)
 
     while (current)
     {
-        printf("Token: %s, Value: %s\n",
+        printf("Token: %s -------> Value: %s\n",
                type_names[current->type],
                current->value ? current->value : "NULL");
         current = current->next;
     }
+}
+
+int main()
+{
+    print_tokens(tokenize("echo 'hello' > test.txt"));
 }
