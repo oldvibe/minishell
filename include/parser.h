@@ -50,9 +50,9 @@ typedef struct s_cmd {
 // int is_special_char(char c);
 // char *read_word(t_lexer *lexer);
 // t_token *get_next_token(t_lexer *lexer);
-// t_token *tokenize(char *input);
+t_token *tokenize(char *input);
 // void free_tokens(t_token *tokens);
-// void print_tokens(t_token *tokens);
+void print_tokens(t_token *tokens);
 
 // Parser functions (to be implemented)
 // t_cmd *parse_tokens(t_token *tokens);

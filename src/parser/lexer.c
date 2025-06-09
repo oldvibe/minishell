@@ -130,7 +130,7 @@ t_token *get_next_token(t_lexer *lexer)
         return (create_token(TOKEN_REDIRECT_OUT, ">"));
     }
 
-    // Handle words (including quoted strings)
+    // Handle words ("" | '' < << > >>)
     char *word = read_word(lexer);
     if (!word)
         return (NULL);
