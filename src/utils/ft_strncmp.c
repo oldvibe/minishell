@@ -1,4 +1,4 @@
-#include "../include/utils.h"
+#include "../../include/utils.h"
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {

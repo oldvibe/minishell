@@ -1,4 +1,4 @@
-#include "../include/utils.h"
+#include "../../include/utils.h"
 
 char *ft_strtok(char *str, const char *delim, int *index)
 {
