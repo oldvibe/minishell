@@ -77,7 +77,7 @@ char *read_word(t_lexer *lexer)
     char *word = malloc(len + 1);
     if (!word)
         return (NULL);
-    ft_strncpy(word, lexer->input + start, len);
+    strncpy(word, lexer->input + start, len);
     word[len] = '\0';
 
     return (word);

@@ -5,7 +5,7 @@ int ft_strlen(const char *s)
     int count;
 
     count = 0;
-    while(s)
+    while(s[count])
     {
         count++;
     }

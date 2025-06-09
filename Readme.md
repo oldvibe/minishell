@@ -26,6 +26,9 @@ command line interface : ______________________
 
                           kernel mode : kernel
 
- shell ------> fork --------return child PID---> wait
-                    --------return 0 ----------> exec --> syscall --> exit
+ shell -----> fork --------return child PID---> wait
+                 ----return 0 ----------> exec --> syscall --> exit
+[ls] → [|] → [grep] → [hello] → NULL // commands 
              
+hello hada gha test 
+
