@@ -26,14 +26,14 @@ int main(int ac, char **av, char **envp)
 		token = tokenize(input);
 		if (token)
 		{
-			if (cmds && cmds[0] && ft_strcmp(cmds[0], "exit") == 0)
-			{
-				ft_exit(cmds);
-			}
+			// cause segfault for now because of cmds 
+			// if (cmds && cmds[0] && ft_strcmp(cmds[0], "exit") == 0)
+			// {
+			// 	ft_exit(cmds);
+			// }
 			//print_tokens(token);
 			free_tokens(token);
 		}
-
 		free(input);
 	}
 	free_env(env);

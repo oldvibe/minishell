@@ -14,6 +14,7 @@
 #include "utils.h"
 #include "parser.h"
 #include "builtins.h"
+#include "../src/utils/ft_printf/printf.h"
 
 typedef struct s_env
 {

@@ -11,7 +11,7 @@ static int	check_number(const char	*str)
 		i++;
 	while (str[i])
 	{
-		if (!(str[i] >= 0 && str[i] <= 9))
+		if (!(str[i] >= '0' && str[i] <= '9'))
 			return (0);
 		i++;
 	}
@@ -20,19 +20,21 @@ static int	check_number(const char	*str)
 
 int	ft_exit(char	**cmds)
 {
+	int	exit_status;
+
 	printf("exit\n");
 	if (!cmds[1])
 		exit(0);
 	if (!check_number(cmds[1]))
 	{
-		printf("minishell: exit: %s: numeric argument required\n", cmds[1]);
+		ft_printf("minishell: exit: %s: numeric argument required\n", cmds[1]);
 		exit(2);
 	}
 	if (cmds[2])
 	{
-		printf("minishell: exit: too many arguments\n");
+		ft_printf("minishell: exit: too many arguments\n");
 		return (1);
 	}
 	exit_status = ft_atoi(cmds[1]);
-	exit((unsigned char)exit_status);
+	exit(exit_status);
 }

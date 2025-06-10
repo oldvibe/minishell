@@ -73,7 +73,7 @@ static int	words_split(char	**str, const char *s, char c)
 				s++;
 		}
 	}
-
+	return(1);
 }
 
 char	**ft_split(const char *s, char c)

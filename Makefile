@@ -2,9 +2,16 @@ CC = cc
 FLAGS = -Wall -Wextra -Werror
 
 NAME =  minishell
+PRINTF = src/utils/ft_printf/printf.a
 
 SRCS =  src/main.c \
 		src/parser/lexer.c \
+		src/builtins/builtins.c \
+		src/builtins/ft_cd.c \
+		src/builtins/ft_echo.c \
+		src/builtins/ft_exit.c \
+		src/builtins/ft_pwd.c \
+		src/utils/ft_atoi.c \
 		src/utils/ft_split.c \
 		src/utils/ft_strchr.c \
 		src/utils/ft_strcmp.c \
@@ -22,12 +29,15 @@ OBJS = $(SRCS:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -lreadline -o $(NAME)
+	make -C src/utils/ft_printf
+	$(CC) $(CFLAGS) $(OBJS) $(PRINTF) -lreadline -o $(NAME)
 
 clean:
+	make -C src/utils/ft_printf clean
 	rm -f $(OBJS)
 
 fclean: clean
+	make -C src/utils/ft_printf fclean
 	rm -f $(NAME)
 
 re: fclean all
