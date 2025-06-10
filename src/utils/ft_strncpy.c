@@ -1,6 +1,17 @@
 #include "../../include/utils.h"
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+char	*ft_strncpy(char *dest, const char *src, size_t n)
 {
+	size_t i;
 
+	i = 0;
+	if (!src || !dest || n == 0)
+		return (NULL);
+	while (i < n  && src[i])
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
 }

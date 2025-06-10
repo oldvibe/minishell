@@ -28,9 +28,9 @@ int	add_arg_to_cmd(t_cmd *cmd, char *arg)
 	}
 	cmd->args = realloc(cmd->args, sizeof(char *) * (count + 2));
 	if (!cmd->args)
-		return (0); 
+		return (0);
 
-	cmd->args[count] = strdup(arg);
+	cmd->args[count] = ft_strdup(arg);
 	cmd->args[count + 1] = NULL;    // NULL terminator
 	return (1);
 }
@@ -43,13 +43,13 @@ int	add_arg_to_cmd(t_cmd *cmd, char *arg)
 //         printf("Failed to create command\n");
 //         return (1);
 //     }
-    
+
 //     printf("=== Testing add_arg_to_cmd ===\n");
-    
+
 //     add_arg_to_cmd(cmd, "ls");
 //     add_arg_to_cmd(cmd, "-la");
 //     add_arg_to_cmd(cmd, "/home");
-    
+
 //     // // Print arguments
 //     printf("Command arguments:\n");
 //     if (cmd->args)
@@ -61,7 +61,7 @@ int	add_arg_to_cmd(t_cmd *cmd, char *arg)
 //             i++;
 //         }
 //     }
-    
+
 //     if (cmd->args)
 //     {
 //         for (int i = 0; cmd->args[i]; i++)
@@ -69,6 +69,6 @@ int	add_arg_to_cmd(t_cmd *cmd, char *arg)
 //         free(cmd->args);
 //     }
 //     free(cmd);
-    
+
 //     return (0);
 // }
