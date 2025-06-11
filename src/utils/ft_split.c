@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ykebieb <ykebieb@student.1337.ma>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/11 14:28:56 by ykebieb           #+#    #+#             */
+/*   Updated: 2025/06/11 14:28:57 by ykebieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/utils.h"
 
 static int	count_word(char const *s, char c)
@@ -24,7 +36,7 @@ static char	*put_word(char const *s, char c)
 	int		len;
 	int		i;
 	char	*str;
-	
+
 	if (!s)
 		return (NULL);
 	len = 0;
@@ -53,7 +65,7 @@ static void	ft_free(char **str, int i)
 	free(str);
 }
 
-static int	words_split(char	**str, const char *s, char c)
+static int	words_split(char **str, const char *s, char c)
 {
 	int	i;
 
@@ -66,14 +78,14 @@ static int	words_split(char	**str, const char *s, char c)
 			if (!str[i])
 			{
 				ft_free(str, i - 1);
-					return (0);
+				return (0);
 			}
 			i++;
 			while (*s && *s != c)
 				s++;
 		}
 	}
-	return(1);
+	return (1);
 }
 
 char	**ft_split(const char *s, char c)

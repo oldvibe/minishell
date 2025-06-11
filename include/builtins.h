@@ -1,7 +1,7 @@
 #ifndef BUILTINS_H
-#define BUILTINS_H
+# define BUILTINS_H
 
-void	ft_pwd();
-int	ft_exit(char	**cmds);
+int		ft_pwd();
+int		ft_exit(char **cmds);
 
 #endif

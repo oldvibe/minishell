@@ -1,12 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ykebieb <ykebieb@student.1337.ma>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/11 14:29:34 by ykebieb           #+#    #+#             */
+/*   Updated: 2025/06/11 14:29:42 by ykebieb          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/utils.h"
 
-char *ft_substr(const char *s, size_t start, size_t len)
+char	*ft_substr(const char *s, size_t start, size_t len)
 {
 	char	*sub;
 	size_t	str_len;
 	size_t	i;
 
-	if(!s)
+	if (!s)
 		return (NULL);
 	i = 0;
 	str_len = ft_strlen(s);
@@ -25,18 +37,3 @@ char *ft_substr(const char *s, size_t start, size_t len)
 	sub[i] = '\0';
 	return (sub);
 }
-
-// char *ft_substr(const char *s, size_t start, size_t len)
-// {
-//     char *sub = malloc(len + 1);
-//     if (!sub)
-//         return NULL;
-//     size_t i = 0;
-//     while (i < len && s[start + i])
-//     {
-//         sub[i] = s[start + i];
-//         i++;
-//     }
-//     sub[i] = '\0';
-//     return sub;
-// }

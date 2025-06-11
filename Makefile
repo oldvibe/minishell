@@ -6,11 +6,13 @@ PRINTF = src/utils/ft_printf/printf.a
 
 SRCS =  src/main.c \
 		src/parser/lexer.c \
+		src/parser/parser.c \
 		src/builtins/builtins.c \
 		src/builtins/ft_cd.c \
 		src/builtins/ft_echo.c \
 		src/builtins/ft_exit.c \
 		src/builtins/ft_pwd.c \
+		src/builtins/ft_env.c \
 		src/utils/ft_atoi.c \
 		src/utils/ft_split.c \
 		src/utils/ft_strchr.c \
@@ -22,6 +24,11 @@ SRCS =  src/main.c \
 		src/utils/ft_strtok.c \
 		src/utils/ft_substr.c \
 		src/utils/ft_strncpy.c \
+		src/utils/ft_memcpy.c \
+		src/utils/ft_memset.c \
+		src/utils/ft_bzero.c \
+		src/utils/ft_calloc.c \
+		src/utils/ft_realloc.c \
 		src/dup_env.c
 
 OBJS = $(SRCS:.c=.o)

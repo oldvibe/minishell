@@ -2,7 +2,7 @@
 
 int	ft_putunbr(unsigned int n)
 {
-	int	len;
+	int len;
 
 	len = 0;
 	if (n >= 10)

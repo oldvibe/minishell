@@ -18,18 +18,18 @@ RM = rm -f
 
 all: $(NAME)
 
-$(NAME): $(OBJ) 
+$(NAME): $(OBJ)
 	ar rcs $(NAME) $(OBJ)
 
-clean : 
+clean :
 	$(RM) $(OBJ)
 
-fclean : clean 
+fclean : clean
 	$(RM) $(NAME)
 
 re : fclean all
 
-%.o: %.c 
+%.o: %.c
 	$(CC) $(FLGS) -c $< -o $@
 
 .PHONY : all clean fclean re

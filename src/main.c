@@ -4,8 +4,9 @@ int main(int ac, char **av, char **envp)
 {
 	t_env	*env;
 	t_token	*token;
-	char	**cmds;
+	t_cmd   *cmds;
 	char	*input;
+	pid_t	pid;
 
 	(void)ac;
 	(void)av;
@@ -24,15 +25,22 @@ int main(int ac, char **av, char **envp)
 		if (*input)
 			add_history(input);
 		token = tokenize(input);
-		if (token)
+		cmds = parse_command(&token);
+		if(cmds->args[0])
 		{
-			// cause segfault for now because of cmds 
-			// if (cmds && cmds[0] && ft_strcmp(cmds[0], "exit") == 0)
-			// {
-			// 	ft_exit(cmds);
-			// }
-			//print_tokens(token);
-			free_tokens(token);
+			if (ft_strcmp(cmds->args[0], "exit") == 0)
+			{
+				ft_exit(cmds->args);
+			}
+			pid = fork();
+			if (pid == 0)
+			{
+				execve(cmds->args[0], cmds->args, envp);
+				perror(cmds->args[0]);
+				exit(EXIT_FAILURE);
+			}
+			else
+				waitpid(pid, NULL, 0);
 		}
 		free(input);
 	}

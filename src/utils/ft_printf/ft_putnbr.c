@@ -2,7 +2,7 @@
 
 int	ft_putnbr(int n)
 {
-	int	len;
+	int len;
 
 	len = 0;
 	if (n == -2147483648)

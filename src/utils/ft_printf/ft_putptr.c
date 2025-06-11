@@ -2,10 +2,10 @@
 
 int	ft_putptr(unsigned long ptr)
 {
-	int		len;
-	char	*hexa;
-	char	hex[16];
-	int		i;
+	int len;
+	char *hexa;
+	char hex[16];
+	int i;
 
 	hexa = "0123456789abcdef";
 	len = 0;

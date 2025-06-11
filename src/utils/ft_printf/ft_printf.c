@@ -1,12 +1,13 @@
 #include "printf.h"
 
-static int  check(const char    format, va_list arg)
+static int	check(const char format, va_list arg)
 {
-    int len = 0;
+	int	len;
 
-    len = 0;
-    if (format == 'c')
-       	len += ft_putchar(va_arg(arg, int));
+	len = 0;
+	len = 0;
+	if (format == 'c')
+		len += ft_putchar(va_arg(arg, int));
 	else if (format == 's')
 		len += ft_putstr(va_arg(arg, char *));
 	else if (format == 'p')
@@ -27,30 +28,30 @@ static int  check(const char    format, va_list arg)
 	return (len);
 }
 
-int ft_printf(const char *format, ...)
+int	ft_printf(const char *format, ...)
 {
-    va_list arg;
-    int     i;
-    int     len;
+	va_list arg;
+	int i;
+	int len;
 
-    len = 0;
-    i = 0;
-    if(!format)
-        return (-1);
-    va_start(arg, format);
-    while (format[i])
-    {
-        if (format[i] == '%')
-        {
-            i += 1;
-            if (!format[i])
-                return (-1);
-            len += check(format[i], arg);
-        }
-        else
-            len += ft_putchar(format[i]);
-        i++;
-    }
-    va_end(arg);
-    return (len);
+	len = 0;
+	i = 0;
+	if (!format)
+		return (-1);
+	va_start(arg, format);
+	while (format[i])
+	{
+		if (format[i] == '%')
+		{
+			i += 1;
+			if (!format[i])
+				return (-1);
+			len += check(format[i], arg);
+		}
+		else
+			len += ft_putchar(format[i]);
+		i++;
+	}
+	va_end(arg);
+	return (len);
 }

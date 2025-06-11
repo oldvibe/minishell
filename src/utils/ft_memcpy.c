@@ -1,33 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ykebieb <ykebieb@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/11 14:29:25 by ykebieb           #+#    #+#             */
-/*   Updated: 2025/06/11 14:29:26 by ykebieb          ###   ########.fr       */
+/*   Created: 2025/06/11 14:28:47 by ykebieb           #+#    #+#             */
+/*   Updated: 2025/06/11 14:28:48 by ykebieb          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/utils.h"
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-	unsigned char	*str1;
-	unsigned char	*str2;
+	unsigned char	*ptr_dest;
+	unsigned char	*ptr_src;
 	size_t			i;
 
-	if (n == 0)
-		return (0);
 	i = 0;
-	str1 = (unsigned char *)s1;
-	str2 = (unsigned char *)s2;
-	while ((str1[i] || str2[i]) && i < n)
+	ptr_dest = (unsigned char *)dest;
+	ptr_src = (unsigned char *)src;
+	while (i < n)
 	{
-		if (str1[i] != str2[i])
-			return (str1[i] - str2[i]);
+		ptr_dest[i] = ptr_src[i];
 		i++;
 	}
-	return (0);
+	return (dest);
 }

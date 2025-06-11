@@ -1,37 +1,43 @@
 #include "../../include/minishell.h"
 
 // Read word token (handles quotes)
-char *read_word(t_lexer *lexer)
+char	*read_word(t_lexer *lexer)
 {
-	int start = lexer->pos;
-	char quote = 0;
-	int i = 0;
+	int		start;
+	char	quote;
+	int		i;
+	char	c;
+	int		len;
+	char	*word;
 
+	start = lexer->pos;
+	quote = 0;
+	i = 0;
 	// calculate the len excluding the quotes
 	while (lexer->pos < lexer->len)
 	{
-		char c = lexer->input[lexer->pos];
+		c = lexer->input[lexer->pos];
 		// Handle quotes
 		if ((c == '\'' || c == '"') && !quote)
 		{
 			quote = c;
 			lexer->pos++;
-			continue;
+			continue ;
 		}
 		if (c == quote)
 		{
 			quote = 0;
 			lexer->pos++;
-			continue;
+			continue ;
 		}
 		// If not in quotes and hit special char, stop
 		if (!quote && is_special_char(c))
-			break;
+			break ;
 		lexer->pos++;
 	}
 	// Extract the word
-	int len = lexer->pos - start;
-	char *word = malloc(len + 1);
+	len = lexer->pos - start;
+	word = malloc(len + 1);
 	if (!word)
 		return (NULL);
 	ft_strncpy(word, lexer->input + start, len);
@@ -40,17 +46,17 @@ char *read_word(t_lexer *lexer)
 }
 
 // Skip whitespace
-void skip_whitespace(t_lexer *lexer)
+void	skip_whitespace(t_lexer *lexer)
 {
-	while (lexer->pos < lexer->len &&
-			(lexer->input[lexer->pos] == ' ' || lexer->input[lexer->pos] == '\t'))
+	while (lexer->pos < lexer->len && (lexer->input[lexer->pos] == ' '
+			|| lexer->input[lexer->pos] == '\t'))
 		lexer->pos++;
 }
 
 // Create new token
-t_token *create_token(t_token_type type, char *value)
+t_token	*create_token(t_token_type type, char *value)
 {
-	t_token *token;
+	t_token	*token;
 
 	token = malloc(sizeof(t_token));
 	if (!token)
@@ -64,15 +70,16 @@ t_token *create_token(t_token_type type, char *value)
 	return (token);
 }
 
-int is_special_char(char c)
+int	is_special_char(char c)
 {
-	return (c == '|' || c	 == '<' || c == '>' || c == ' ' || c == '\t');
+	return (c == '|' || c == '<' || c == '>' || c == ' ' || c == '\t');
 }
 
 // Get next token
-t_token *get_next_token(t_lexer *lexer)
+t_token	*get_next_token(t_lexer *lexer)
 {
 	char	c;
+	char	*word;
 
 	skip_whitespace(lexer);
 	if (lexer->pos >= lexer->len)
@@ -84,41 +91,37 @@ t_token *get_next_token(t_lexer *lexer)
 		lexer->pos++;
 		return (create_token(TOKEN_PIPE, "|"));
 	}
-    // Handle redirections
-    if (c == '<')
-    {
-        if (lexer->pos + 1 < lexer->len && lexer->input[lexer->pos + 1] == '<')
-        {
-            lexer->pos += 2;
-            return (create_token(TOKEN_HEREDOC, "<<"));
-        }
-        lexer->pos++;
-        return (create_token(TOKEN_REDIRECT_IN, "<"));
-    }
-
-    if (c == '>')
-    {
-        if (lexer->pos + 1 < lexer->len && lexer->input[lexer->pos + 1] == '>')
-        {
-            lexer->pos += 2;
-            return (create_token(TOKEN_REDIRECT_APPEND, ">>"));
-        }
-        lexer->pos++;
-        return (create_token(TOKEN_REDIRECT_OUT, ">"));
-    }
-
-    // Handle words (including quoted strings)
-    char *word = read_word(lexer);
-    if (!word)
-        return (NULL);
-
-    return (create_token(TOKEN_WORD, word));
+	// Handle redirections
+	if (c == '<')
+	{
+		if (lexer->pos + 1 < lexer->len && lexer->input[lexer->pos + 1] == '<')
+		{
+			lexer->pos += 2;
+			return (create_token(TOKEN_HEREDOC, "<<"));
+		}
+		lexer->pos++;
+		return (create_token(TOKEN_REDIRECT_IN, "<"));
+	}
+	if (c == '>')
+	{
+		if (lexer->pos + 1 < lexer->len && lexer->input[lexer->pos + 1] == '>')
+		{
+			lexer->pos += 2;
+			return (create_token(TOKEN_REDIRECT_APPEND, ">>"));
+		}
+		lexer->pos++;
+		return (create_token(TOKEN_REDIRECT_OUT, ">"));
+	}
+	// Handle words (including quoted strings)
+	word = read_word(lexer);
+	if (!word)
+		return (NULL);
+	return (create_token(TOKEN_WORD, word));
 }
 
-
-t_lexer *init_lexer(char *input)
+t_lexer	*init_lexer(char *input)
 {
-	t_lexer *lexer;
+	t_lexer	*lexer;
 
 	lexer = malloc(sizeof(t_lexer));
 	if (!lexer)
@@ -130,12 +133,12 @@ t_lexer *init_lexer(char *input)
 }
 
 // Tokenize entire input
-t_token *tokenize(char *input)
+t_token	*tokenize(char *input)
 {
-	t_lexer *lexer;
-	t_token *tokens;
-    t_token *current;
-    t_token *token;
+	t_lexer	*lexer;
+	t_token	*tokens;
+	t_token	*current;
+	t_token	*token;
 
 	lexer = init_lexer(input);
 	if (!lexer)
@@ -160,7 +163,7 @@ t_token *tokenize(char *input)
 }
 
 // Free token list
-void free_tokens(t_token *token)
+void	free_tokens(t_token *token)
 {
 	t_token *current;
 	t_token *next;
@@ -173,22 +176,5 @@ void free_tokens(t_token *token)
 			free(current->value);
 		free(current);
 		current = next;
-	}
-}
-
-// Debug function to print tokens
-void print_tokens(t_token *token)
-{
-	t_token	*current = token;
-	char	*type_names[] = {"WORD", "PIPE", "REDIRECT_IN", "REDIRECT_OUT",
-								"REDIRECT_APPEND", "HEREDOC", "EOF"};
-	while (current)
-	{
-		printf("Token: %s, Value: ", type_names[current->type]);
-		if (current->value)
-			printf("%s\n", current->value);
-		else
-			printf("NULL\n");
-		current = current->next;
 	}
 }
