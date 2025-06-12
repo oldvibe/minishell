@@ -23,17 +23,26 @@ int	is_builtin(t_cmd *cmds)
 
 void	execute_builtin(t_cmd *cmds, t_env *env_list)
 {
-	if (ft_strcmp(cmds->args[0], "exti") == 0)
+	if (ft_strcmp(cmds->args[0], "exit") == 0)
 		ft_exit(cmds->args);
 	else if (ft_strcmp(cmds->args[0], "pwd") == 0)
 		ft_pwd();
 	else if (ft_strcmp(cmds->args[0], "env") == 0)
 		ft_env(cmds->args, env_list);
+	// else if (ft_strcmp(cmds->args[0], "cd") == 0)
+	// 	ft_cd();
+	// else if (ft_strcmp(cmds->args[0], "export") == 0)
+	// 	ft_export();
+	// else if (ft_strcmp(cmds->args[0], "unset") == 0)
+	// 	ft_unset();
+	// else if (ft_strcmp(cmds->args[0], "echo") == 0)
+	// 	ft_echo();
 }
 
 void	execute_command(t_cmd	*cmds, char	**envp, t_env *env_list)
 {
 	pid_t	pid;
+	t_path	pt;
 
 	if (!cmds ||!cmds->args || !cmds->args[0])
 		return ;
@@ -53,6 +62,7 @@ void	execute_command(t_cmd	*cmds, char	**envp, t_env *env_list)
 		waitpid(pid, NULL, 0);
 	else
 		perror("fork");
+	free(pt.path);
 }
 
 

@@ -7,6 +7,7 @@ PRINTF = src/utils/ft_printf/printf.a
 SRCS =  src/main.c \
 		src/ft_parser/lexer.c \
 		src/ft_parser/parser.c \
+		src/execution/dup_env.c \
 		src/execution/execution.c \
 		src/builtins/builtins.c \
 		src/builtins/ft_cd.c \
@@ -30,7 +31,7 @@ SRCS =  src/main.c \
 		src/utils/ft_bzero.c \
 		src/utils/ft_calloc.c \
 		src/utils/ft_realloc.c \
-		src/dup_env.c
+
 
 OBJS = $(SRCS:.c=.o)
 
