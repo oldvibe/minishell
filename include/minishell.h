@@ -4,6 +4,7 @@
 # include "../src/utils/ft_printf/printf.h"
 # include "builtins.h"
 # include "parser.h"
+# include "execution.h"
 # include "utils.h"
 # include <fcntl.h>
 # include <limits.h>
@@ -15,13 +16,7 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <unistd.h>
-
-typedef struct s_env
-{
-	char			*key;
-	char			*value;
-	struct s_env	*next;
-}					t_env;
+# include "env.h"
 
 // for duplicate the env :
 t_env				*create_env(const char *env);

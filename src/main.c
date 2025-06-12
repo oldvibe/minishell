@@ -25,23 +25,9 @@ int main(int ac, char **av, char **envp)
 		if (*input)
 			add_history(input);
 		token = tokenize(input);
-		cmds = parse_command(&token);
-		if(cmds->args[0])
-		{
-			if (ft_strcmp(cmds->args[0], "exit") == 0)
-			{
-				ft_exit(cmds->args);
-			}
-			pid = fork();
-			if (pid == 0)
-			{
-				execve(cmds->args[0], cmds->args, envp);
-				perror(cmds->args[0]);
-				exit(EXIT_FAILURE);
-			}
-			else
-				waitpid(pid, NULL, 0);
-		}
+		cmds= parse_command(&token);
+		if (cmds)
+			execute_command(cmds, envp, env);
 		free(input);
 	}
 	free_env(env);

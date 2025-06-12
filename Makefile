@@ -5,8 +5,9 @@ NAME =  minishell
 PRINTF = src/utils/ft_printf/printf.a
 
 SRCS =  src/main.c \
-		src/parser/lexer.c \
-		src/parser/parser.c \
+		src/ft_parser/lexer.c \
+		src/ft_parser/parser.c \
+		src/execution/execution.c \
 		src/builtins/builtins.c \
 		src/builtins/ft_cd.c \
 		src/builtins/ft_echo.c \
