@@ -29,7 +29,7 @@ SRCS =  src/main.c \
 		src/utils/ft_bzero.c \
 		src/utils/ft_calloc.c \
 		src/utils/ft_realloc.c \
-		src/dup_env.c
+		src/excution/dup_env.c
 
 OBJS = $(SRCS:.c=.o)
 
