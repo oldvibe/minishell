@@ -3,7 +3,9 @@
 #ifndef PARSER_H
 # define PARSER_H
 
-# include "minishell.h"
+// # include "minishell.h"
+struct s_env;
+typedef struct s_env t_env;
 
 // Token types
 typedef enum
@@ -57,14 +59,10 @@ void				print_tokens(t_token *tokens);
 
 // Parser functions (to be implemented)
 t_cmd				*init_cmd(void);
-int					add_arg_to_cmd(t_cmd *cmd, char *arg);
-t_cmd				*parse_command(t_token **tokens);
+int    				add_arg_to_cmd(t_cmd *cmd, char *arg, t_env *env);
+t_cmd   			*parse_command(t_token **tokens, t_env *env);
+int 				validate_tokens(t_token *tokens);
+t_cmd   			*parse_tokens(t_token *tokens, t_env *env);
 
-
-// t_cmd *parse_tokens(t_token *tokens);
-// t_cmd *parse_simple_command(t_token **tokens);
-// void handle_redirections(t_cmd *cmd, t_token **tokens);
-// t_cmd *create_command(void);
-// void free_commands(t_cmd *cmd);
 
 #endif

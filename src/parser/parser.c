@@ -1,6 +1,5 @@
 #include "../../include/minishell.h"
 
-// initialization
 t_cmd	*init_cmd(void)
 {
 	t_cmd	*cmd;
@@ -17,8 +16,61 @@ t_cmd	*init_cmd(void)
 	return (cmd);
 }
 
-int	add_arg_to_cmd(t_cmd *cmd, char *arg)
+char *get_env_value(t_env *env, char *key)
 {
+    t_env *current = env;
+    
+    while (current)
+    {
+        if (ft_strcmp(current->key, key) == 0)
+            return current->value;
+        current = current->next;
+    }
+    return NULL;
+}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
+
+char *expand_variable(char *str, t_env *env)
+{
+    char *result;
+    char *var_name;
+    char *var_value;
+    int i;
+    
+    if (!str || !ft_strchr(str, '$'))
+        return ft_strdup(str);
+    
+    if (str[0] == '$')
+    {
+        // ft_isalnum nzidoha
+        i = 1;
+        // while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
+		while (str[i] && ((str[i] >= 'a' && str[i] <= 'z') || 
+                  (str[i] >= 'A' && str[i] <= 'Z') || 
+                  (str[i] >= '0' && str[i] <= '9') || 
+                  str[i] == '_'))
+            i++;
+        
+        var_name = malloc(i);
+        ft_strncpy(var_name, str + 1, i - 1);
+        var_name[i - 1] = '\0';
+        
+        // Get value from environment
+        var_value = get_env_value(env, var_name);
+        free(var_name);
+        
+        if (!var_value)
+            return ft_strdup(""); // Return empty if var not found
+        
+        return ft_strdup(var_value);
+    }
+    
+    return ft_strdup(str);
+}
+
+// all good
+int	add_arg_to_cmd(t_cmd *cmd, char *arg,  t_env *env)
+{
+	char *expanded_arg;
 	int	count;
 
 	count = 0;
@@ -30,6 +82,7 @@ int	add_arg_to_cmd(t_cmd *cmd, char *arg)
 	cmd->args = ft_realloc(cmd->args, sizeof(char *) * (count + 2));
 	if (!cmd->args)
 		return (0);
+	expanded_arg = expand_variable(arg, env);
 	cmd->args[count] = ft_strdup(arg);
 	cmd->args[count + 1] = NULL;
 	return (1);
@@ -87,26 +140,8 @@ int	handle_redirection(t_cmd *cmd, t_token **myToken)
 	return (1);
 }
 
-void	free_cmd(t_cmd *cmd)
-{
-	if (!cmd)
-		return ;
-	if (cmd->args)
-	{
-		for (int i = 0; cmd->args[i]; i++)
-			free(cmd->args[i]);
-		free(cmd->args);
-	}
-	if (cmd->input_file)
-		free(cmd->input_file);
-	if (cmd->output_file)
-		free(cmd->output_file);
-	if (cmd->heredoc_delimiter)
-		free(cmd->heredoc_delimiter);
-	free(cmd);
-}
 
-t_cmd	*parse_command(t_token **tokens)
+t_cmd	*parse_command(t_token **tokens,  t_env *env)
 {
 	t_cmd	*cmd;
 	t_token	*current;
@@ -119,13 +154,11 @@ t_cmd	*parse_command(t_token **tokens)
 	{
 		if (!current->value)
 			current->value = "NULL";
-		printf("-----------> Processing token: %s (type:%d) <---------------\n",
-				current->value, current->type);
+		printf("-----------> Processing token: %s (type:%d) <---------------\n", current->value, current->type);
 		if (current->type == TOKEN_WORD)
 		{
-			// Add argument to command
-			printf("  -> Adding argument: '%s'\n", current->value);
-			if (!add_arg_to_cmd(cmd, current->value))
+			printf("---> Adding argument: '%s'\n", current->value);
+			if (!add_arg_to_cmd(cmd, current->value, env))
 			{
 				printf("Error: Failed to add argument\n");
 				free_cmd(cmd);
@@ -149,7 +182,7 @@ t_cmd	*parse_command(t_token **tokens)
 		}
 		else
 		{
-			printf("Error: Unexpected token type %d\n", current->type);
+			printf("\nError: Unexpected token type %d\n", current->type);
 			free_cmd(cmd);
 			return (NULL);
 		}
@@ -161,102 +194,100 @@ t_cmd	*parse_command(t_token **tokens)
 	return (cmd);
 }
 
-void	print_cmd(t_cmd *cmd)
+t_cmd *parse_tokens(t_token *tokens, t_env *env)
 {
-	if (!cmd)
-	{
-		printf("Command: NULL\n");
-		return ;
-	}
-	printf("=== Command Info ===\n");
-	// Print arguments
-	printf("Arguments: ");
-	if (cmd->args)
-	{
-		for (int i = 0; cmd->args[i]; i++)
-			printf("'%s' ", cmd->args[i]);
-	}
-	else
-		printf("(none)");
-	printf("\n");
-	// Print redirections
-	if (cmd->input_file)
-		printf("Input file: %s\n", cmd->input_file);
-	if (cmd->output_file)
-		printf("Output file: %s (mode: %s)\n", cmd->output_file,
-			cmd->append_mode ? "append" : "overwrite");
-	if (cmd->heredoc_delimiter)
-		printf("Heredoc delimiter: %s\n", cmd->heredoc_delimiter);
+    if (!tokens)
+        return (NULL);
+    
+    t_cmd *first_cmd = NULL; 
+    t_cmd *current_cmd = NULL;   // last command zdnaha
+    t_token *current_token = tokens;
+    
+    while (current_token && current_token->type != TOKEN_EOF)
+    {
+        printf("\n=== Parsing new command ===\n");
+        
+        t_cmd *new_cmd = parse_command(&current_token, env);
+        if (!new_cmd)
+        {
+            printf("Error: Failed to parse command\n");
+            free_cmd_list(first_cmd);
+            return (NULL);
+        }
+        
+        if (!first_cmd)
+        {
+            printf("Setting as first command\n");
+            first_cmd = new_cmd;
+            current_cmd = new_cmd;
+        }
+        else
+        {
+            printf("Linking to previous command\n");
+            current_cmd->next = new_cmd;
+            current_cmd = new_cmd;
+        }
+        
+        if (current_token && current_token->type == TOKEN_PIPE)
+        {
+            printf("Found pipe, continuing to next command\n");
+            current_token = current_token->next;  // Skip khfif lpipe
+        }
+    }
+    
+    return (first_cmd);
 }
 
-// Debug function to print tokens
-void	print_tokens(t_token *token)
+int validate_tokens(t_token *tokens)
 {
-	t_token	*current;
-	char	*type_names[] = {"WORD", "PIPE", "REDIRECT_IN", "REDIRECT_OUT",
-			"REDIRECT_APPEND", "HEREDOC", "EOF"};
-
-	current = token;
-	while (current)
-	{
-		printf("Token: %s, Value: ", type_names[current->type]);
-		if (current->value)
-			printf("%s\n", current->value);
-		else
-			printf("NULL\n");
-		current = current->next;
-	}
+    t_token *current = tokens;
+    
+    if (!current || current->type == TOKEN_EOF)
+    {
+        printf("Error: Empty command\n");
+        return 0;
+    }
+    
+    // Check if starts with pipe
+    if (current->type == TOKEN_PIPE)
+    {
+        printf("Error: Command cannot start with pipe\n");
+        return 0;
+    }
+    
+    while (current && current->type != TOKEN_EOF)
+    {
+        // Check pipe followed by pipe or EOF
+        if (current->type == TOKEN_PIPE)
+        {
+            if (!current->next || current->next->type == TOKEN_EOF)
+            {
+                printf("Error: Pipe without command\n");
+                return 0;
+            }
+            if (current->next->type == TOKEN_PIPE)
+            {
+                printf("Error: Invalid double pipe\n");
+                return 0;
+            }
+        }
+        
+        // Check redirections followed by non-word
+        if (current->type == TOKEN_REDIRECT_IN || 
+            current->type == TOKEN_REDIRECT_OUT ||
+            current->type == TOKEN_REDIRECT_APPEND ||
+            current->type == TOKEN_HEREDOC)
+        {
+            if (!current->next || current->next->type != TOKEN_WORD)
+            {
+                printf("Error: Redirection without filename\n");
+                return 0;
+            }
+        }
+        
+        current = current->next;
+    }
+    return 1;
 }
 
 
-
-// int	main(void)
-// {
-// 	t_token	*tokens1;
-// 	t_token	*current1;
-// 	t_cmd	*cmd1;
-// 	t_token	*tokens2;
-// 	t_token	*current2;
-// 	t_cmd	*cmd2;
-// 	t_token	*tokens3;
-// 	t_token	*current3;
-// 	t_cmd	*cmd3;
-
-// 	printf("=== Testing Single Command Parsing ===\n\n");
-
-
-
-// 	// Test 1: Simple command with arguments
-// 	printf("Test 1: ls -la /home\n\n");
-// 	tokens1 = tokenize("ls -la /home");
-// 	current1 = tokens1;
-// 	cmd1 = parse_command(&current1);
-// 	print_cmd(cmd1);
-// 	free_tokens(tokens1);
-// 	free_cmd(cmd1);
-// 	//printf("\n" "=" * 40 "\n\n");
-// 	printf("\n\n");
-
-
-// 	// Test 2: Command with output redirection
-// 	printf("Test 2: echo hello > output.txt\n\n");
-// 	tokens2 = tokenize("echo hello > output.txt");
-// 	current2 = tokens2;
-// 	cmd2 = parse_command(&current2);
-// 	print_cmd(cmd2);
-// 	free_tokens(tokens2);
-// 	free_cmd(cmd2);
-// 	printf("\n\n");
-// 	//printf("\n" "=" * 40 "\n\n");
-
-
-// 	// Test 3: Complex command with multiple redirections
-// 	printf("Test 3: cat < input.txt > output.txt\n\n");
-// 	tokens3 = tokenize("cat < input.txt > output.txt");
-// 	current3 = tokens3;
-// 	cmd3 = parse_command(&current3);
-// 	print_cmd(cmd3);
-// 	free_tokens(tokens3);
-// 	free_cmd(cmd3);
-// 	return (0);
-// }

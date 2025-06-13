@@ -1,7 +1,9 @@
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 void	print_cmd(t_cmd *cmd)
 {
+	int	i;
+
 	if (!cmd)
 	{
 		printf("Command: NULL\n");
@@ -12,8 +14,12 @@ void	print_cmd(t_cmd *cmd)
 	printf("Arguments: ");
 	if (cmd->args)
 	{
-		for (int i = 0; cmd->args[i]; i++)
+		i = 0;
+		while (cmd->args[i])
+		{
 			printf("'%s' ", cmd->args[i]);
+			i++;
+		}
 	}
 	else
 		printf("(none)");

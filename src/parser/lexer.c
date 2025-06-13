@@ -1,6 +1,5 @@
 #include "../../include/minishell.h"
 
-// Read word token (handles quotes)
 char	*read_word(t_lexer *lexer)
 {
 	int		start;
@@ -17,7 +16,6 @@ char	*read_word(t_lexer *lexer)
 	while (lexer->pos < lexer->len)
 	{
 		c = lexer->input[lexer->pos];
-		// Handle quotes
 		if ((c == '\'' || c == '"') && !quote)
 		{
 			quote = c;
@@ -30,12 +28,10 @@ char	*read_word(t_lexer *lexer)
 			lexer->pos++;
 			continue ;
 		}
-		// If not in quotes and hit special char, stop
 		if (!quote && is_special_char(c))
 			break ;
 		lexer->pos++;
 	}
-	// Extract the word
 	len = lexer->pos - start;
 	word = malloc(len + 1);
 	if (!word)
@@ -45,7 +41,6 @@ char	*read_word(t_lexer *lexer)
 	return (word);
 }
 
-// Skip whitespace
 void	skip_whitespace(t_lexer *lexer)
 {
 	while (lexer->pos < lexer->len && (lexer->input[lexer->pos] == ' '
@@ -53,7 +48,6 @@ void	skip_whitespace(t_lexer *lexer)
 		lexer->pos++;
 }
 
-// Create new token
 t_token	*create_token(t_token_type type, char *value)
 {
 	t_token	*token;
@@ -75,7 +69,6 @@ int	is_special_char(char c)
 	return (c == '|' || c == '<' || c == '>' || c == ' ' || c == '\t');
 }
 
-// Get next token
 t_token	*get_next_token(t_lexer *lexer)
 {
 	char	c;
@@ -112,7 +105,7 @@ t_token	*get_next_token(t_lexer *lexer)
 		lexer->pos++;
 		return (create_token(TOKEN_REDIRECT_OUT, ">"));
 	}
-	// Handle words (including quoted strings)
+	// Handle words (qoutes dakhlin)
 	word = read_word(lexer);
 	if (!word)
 		return (NULL);
@@ -132,7 +125,7 @@ t_lexer	*init_lexer(char *input)
 	return (lexer);
 }
 
-// Tokenize entire input
+// Tokenize from dakchi lijay mn linput
 t_token	*tokenize(char *input)
 {
 	t_lexer	*lexer;
@@ -160,21 +153,4 @@ t_token	*tokenize(char *input)
 	}
 	free(lexer);
 	return (tokens);
-}
-
-// Free token list
-void	free_tokens(t_token *token)
-{
-	t_token *current;
-	t_token *next;
-
-	current = token;
-	while (current)
-	{
-		next = current->next;
-		if (current->value)
-			free(current->value);
-		free(current);
-		current = next;
-	}
 }
