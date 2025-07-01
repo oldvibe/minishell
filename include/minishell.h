@@ -24,10 +24,10 @@ typedef struct s_env
 }					t_env;
 
 // for duplicate the env :
-t_env				*create_env(const char *env);
-t_env				*dup_env(char **env);
-void				free_env(t_env *env);
-void				print_env(t_env *env);
+// t_env				*create_env(const char *env);
+// t_env				*dup_env(char **env);
+// void				free_env(t_env *env);
+// void				print_env(t_env *env);
 
 
 
