@@ -30,7 +30,6 @@ SRCS =  src/main.c \
 		src/utils/ft_calloc.c \
 		src/utils/ft_realloc.c \
 		src/parser/memoryLeaks.c \
-		src/excution/dup_env.c
 
 OBJS = $(SRCS:.c=.o)
 
