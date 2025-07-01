@@ -3,7 +3,6 @@
 #ifndef PARSER_H
 # define PARSER_H
 
-// # include "minishell.h"
 struct s_env;
 typedef struct s_env t_env;
 
