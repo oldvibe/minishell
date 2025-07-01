@@ -58,9 +58,9 @@ int	main(int ac, char **av, char **envp)
 			pid = fork();
 			if (pid == 0)
 			{
-				execve(cmds->args[0], cmds->args, envp);
-				perror(cmds->args[0]);
-				exit(EXIT_FAILURE);
+				// execve(cmds->args[0], cmds->args, envp);
+				// perror(cmds->args[0]);
+				// exit(EXIT_FAILURE);
 			}
 			else
 				waitpid(pid, NULL, 0);
