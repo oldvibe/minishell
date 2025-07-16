@@ -16,58 +16,6 @@ t_cmd	*init_cmd(void)
 	return (cmd);
 }
 
-char *get_env_value(t_env *env, char *key)
-{
-    t_env *current = env;
-    
-    while (current)
-    {
-        if (ft_strcmp(current->key, key) == 0)
-            return current->value;
-        current = current->next;
-    }
-    return NULL;
-}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
-
-char *expand_variable(char *str, t_env *env)
-{
-    char *result;
-    char *var_name;
-    char *var_value;
-    int i;
-    
-    if (!str || !ft_strchr(str, '$'))
-        return ft_strdup(str);
-    
-    if (str[0] == '$')
-    {
-        // ft_isalnum nzidoha
-        i = 1;
-        // while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-		while (str[i] && ((str[i] >= 'a' && str[i] <= 'z') || 
-                  (str[i] >= 'A' && str[i] <= 'Z') || 
-                  (str[i] >= '0' && str[i] <= '9') || 
-                  str[i] == '_'))
-            i++;
-        
-        var_name = malloc(i);
-        ft_strncpy(var_name, str + 1, i - 1);
-        var_name[i - 1] = '\0';
-        
-        // Get value from environment
-        var_value = get_env_value(env, var_name);
-        free(var_name);
-        
-        if (!var_value)
-            return ft_strdup(""); // Return empty if var not found
-        
-        return ft_strdup(var_value);
-    }
-    
-    return ft_strdup(str);
-}
-
-// all good
 int	add_arg_to_cmd(t_cmd *cmd, char *arg,  t_env *env)
 {
 	char *expanded_arg;
@@ -87,59 +35,6 @@ int	add_arg_to_cmd(t_cmd *cmd, char *arg,  t_env *env)
 	cmd->args[count + 1] = NULL;
 	return (1);
 }
-
-int	handle_redirection(t_cmd *cmd, t_token **myToken)
-{
-	t_token	*token;
-	char	*filename;
-
-	token = *myToken;
-	if (!token->next || token->next->type != TOKEN_WORD)
-	{
-		printf("Error: Expected filename after redirection\n");
-		return (0);
-	}
-	filename = token->next->value;
-	if (token->type == TOKEN_REDIRECT_IN) // <
-	{
-		printf("Setting input file: %s\n", filename);
-		if (cmd->input_file)
-			free(cmd->input_file);
-		cmd->input_file = ft_strdup(filename);
-	}
-	else if (token->type == TOKEN_REDIRECT_OUT) // >
-	{
-		printf("Setting output file (overwrite): %s\n", filename);
-		if (cmd->output_file)
-			free(cmd->output_file);
-		cmd->output_file = ft_strdup(filename);
-		cmd->append_mode = 0;
-	}
-	else if (token->type == TOKEN_REDIRECT_APPEND) // >>
-	{
-		printf("Setting output file (append): %s\n", filename);
-		if (cmd->output_file)
-			free(cmd->output_file);
-		cmd->output_file = ft_strdup(filename);
-		cmd->append_mode = 1;
-	}
-	else if (token->type == TOKEN_HEREDOC) // <<
-	{
-		printf("Setting heredoc delimiter: %s\n", filename);
-		if (cmd->heredoc_delimiter)
-			free(cmd->heredoc_delimiter);
-		cmd->heredoc_delimiter = ft_strdup(filename);
-	}
-	else
-	{
-		printf("Error: Unknown redirection type\n");
-		return (0);
-	}
-	// skip filename [>>>>>>>]
-	*myToken = token->next;
-	return (1);
-}
-
 
 t_cmd	*parse_command(t_token **tokens,  t_env *env)
 {
@@ -200,7 +95,7 @@ t_cmd *parse_tokens(t_token *tokens, t_env *env)
         return (NULL);
     
     t_cmd *first_cmd = NULL; 
-    t_cmd *current_cmd = NULL;   // last command zdnaha
+    t_cmd *current_cmd = NULL;
     t_token *current_token = tokens;
     
     while (current_token && current_token->type != TOKEN_EOF)

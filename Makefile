@@ -7,6 +7,9 @@ PRINTF = src/utils/ft_printf/printf.a
 SRCS =  src/main.c \
 		src/parser/lexer.c \
 		src/parser/parser.c \
+		src/parser/utils_parsing.c \
+		src/parser/expand.c \
+		src/parser/handle_redirection.c \
 		src/builtins/builtins.c \
 		src/builtins/ft_cd.c \
 		src/builtins/ft_echo.c \

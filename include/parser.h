@@ -1,5 +1,3 @@
-/* parser.h - Parser header file */
-
 #ifndef PARSER_H
 # define PARSER_H
 
@@ -7,19 +5,17 @@
 struct s_env;
 typedef struct s_env t_env;
 
-// Token types
 typedef enum
 {
-	TOKEN_WORD,            // normal string
-	TOKEN_PIPE,            // |
-	TOKEN_REDIRECT_IN,     // <
-	TOKEN_REDIRECT_OUT,    // >
-	TOKEN_REDIRECT_APPEND, // >>
-	TOKEN_HEREDOC,         // <<
+	TOKEN_WORD,
+	TOKEN_PIPE,
+	TOKEN_REDIRECT_IN,
+	TOKEN_REDIRECT_OUT,
+	TOKEN_REDIRECT_APPEND,
+	TOKEN_HEREDOC,         
 	TOKEN_EOF
 }					t_token_type;
 
-// Token structure
 typedef struct s_token
 {
 	t_token_type	type;
@@ -27,7 +23,6 @@ typedef struct s_token
 	struct s_token	*next;
 }					t_token;
 
-// Lexer structure
 typedef struct s_lexer
 {
 	char			*input;
@@ -63,6 +58,7 @@ int    				add_arg_to_cmd(t_cmd *cmd, char *arg, t_env *env);
 t_cmd   			*parse_command(t_token **tokens, t_env *env);
 int 				validate_tokens(t_token *tokens);
 t_cmd   			*parse_tokens(t_token *tokens, t_env *env);
-
-
+char 				*expand_variable(char *str, t_env *env);
+char 				*get_env_value(t_env *env, char *key);
+int					handle_redirection(t_cmd *cmd, t_token **myToken);
 #endif

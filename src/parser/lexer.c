@@ -41,13 +41,6 @@ char	*read_word(t_lexer *lexer)
 	return (word);
 }
 
-void	skip_whitespace(t_lexer *lexer)
-{
-	while (lexer->pos < lexer->len && (lexer->input[lexer->pos] == ' '
-			|| lexer->input[lexer->pos] == '\t'))
-		lexer->pos++;
-}
-
 t_token	*create_token(t_token_type type, char *value)
 {
 	t_token	*token;
@@ -64,10 +57,6 @@ t_token	*create_token(t_token_type type, char *value)
 	return (token);
 }
 
-int	is_special_char(char c)
-{
-	return (c == '|' || c == '<' || c == '>' || c == ' ' || c == '\t');
-}
 
 t_token	*get_next_token(t_lexer *lexer)
 {
