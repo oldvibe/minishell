@@ -7,9 +7,21 @@ int	ft_builtin_exit(t_cmd *cmds)
 		write_history(".minishell_history");
 		ft_exit(cmds->args);
 		return (1);
+	} 
+	return (0);
+}
+
+int ft_builtin_pwd(t_cmd *cmds)
+{
+	if (ft_strcmp(cmds->args[0], "pwd") == 0)
+	{
+		write_history(".minishell_history");
+		ft_pwd(cmds->args);
+		return (1);
 	}
 	return (0);
 }
+
 
 int	main(int ac, char **av, char **envp)
 {
@@ -25,6 +37,7 @@ int	main(int ac, char **av, char **envp)
 	if (!env)
 		return (1);
 	read_history(".minishell_history");
+	print_prompt();
 	while (1)
 	{
 		input = readline("minishell:~$ ");
@@ -43,6 +56,7 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 		}
 		cmds = parse_tokens(token, env);
+		// print_cmd(cmds);
 		// hadi gha kantcheki wach command null bach mantihich fmachakil
 		if (!cmds)
 		{
@@ -54,7 +68,9 @@ int	main(int ac, char **av, char **envp)
 		if (cmds->args[0])
 		{
 			if (ft_builtin_exit(cmds))
-				break;
+				break ;
+			if (ft_builtin_pwd(cmds))
+				continue ;
 			pid = fork();
 			if (pid == 0)
 			{
