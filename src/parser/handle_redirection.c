@@ -1,53 +1,59 @@
 #include "../../include/minishell.h"
 
-int	handle_redirection(t_cmd *cmd, t_token **myToken)
+static int	set_input_file(t_cmd *cmd, char *filename)
+{
+	if (cmd->input_file)
+		free(cmd->input_file);
+	cmd->input_file = ft_strdup(filename);
+	return (cmd->input_file != NULL);
+}
+
+static int	set_output_file(t_cmd *cmd, char *filename, int append)
+{
+	if (cmd->output_file)
+		free(cmd->output_file);
+	cmd->output_file = ft_strdup(filename);
+	cmd->append_mode = append;
+	return (cmd->output_file != NULL);
+}
+
+static int	set_heredoc_delimiter(t_cmd *cmd, char *delimiter)
+{
+	if (cmd->heredoc_delimiter)
+		free(cmd->heredoc_delimiter);
+	cmd->heredoc_delimiter = ft_strdup(delimiter);
+	return (cmd->heredoc_delimiter != NULL);
+}
+
+int	handle_redirection(t_cmd *cmd, t_token **my_token)
 {
 	t_token	*token;
 	char	*filename;
 
-	token = *myToken;
+	token = *my_token;
 	if (!token->next || token->next->type != TOKEN_WORD)
-	{
-		printf("Error: Expected filename after redirection\n");
 		return (0);
-	}
 	filename = token->next->value;
 	if (token->type == TOKEN_REDIRECT_IN)
 	{
-		printf("Setting input file: %s\n", filename);
-		if (cmd->input_file)
-			free(cmd->input_file);
-		cmd->input_file = ft_strdup(filename);
+		if (!set_input_file(cmd, filename))
+			return (0);
 	}
 	else if (token->type == TOKEN_REDIRECT_OUT)
 	{
-		printf("Setting output file (overwrite): %s\n", filename);
-		if (cmd->output_file)
-			free(cmd->output_file);
-		cmd->output_file = ft_strdup(filename);
-		cmd->append_mode = 0;
+		if (!set_output_file(cmd, filename, 0))
+			return (0);
 	}
 	else if (token->type == TOKEN_REDIRECT_APPEND)
 	{
-		printf("Setting output file (append): %s\n", filename);
-		if (cmd->output_file)
-			free(cmd->output_file);
-		cmd->output_file = ft_strdup(filename);
-		cmd->append_mode = 1;
+		if (!set_output_file(cmd, filename, 1))
+			return (0);
 	}
 	else if (token->type == TOKEN_HEREDOC)
 	{
-		printf("Setting heredoc delimiter: %s\n", filename);
-		if (cmd->heredoc_delimiter)
-			free(cmd->heredoc_delimiter);
-		cmd->heredoc_delimiter = ft_strdup(filename);
+		if (!set_heredoc_delimiter(cmd, filename))
+			return (0);
 	}
-	else
-	{
-		printf("Error: Unknown redirection type\n");
-		return (0);
-	}
-	// skip filename [>>>>>>>]
-	*myToken = token->next;
+	*my_token = token->next;
 	return (1);
 }

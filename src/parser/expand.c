@@ -1,54 +1,65 @@
 #include "../../include/minishell.h"
 
-char *get_env_value(t_env *env, char *key)
+char	*get_env_value(t_env *env, char *key)
 {
-    t_env *current = env;
-    
-    while (current)
-    {
-        if (ft_strcmp(current->key, key) == 0)
-            return current->value;
-        current = current->next;
-    }
-    return NULL;
+	t_env	*current;
+
+	current = env;
+	while (current)
+	{
+		if (ft_strcmp(current->key, key) == 0)
+			return (current->value);
+		current = current->next;
+	}
+	return (NULL);
 }
 
-
-
-char *expand_variable(char *str, t_env *env)
+static int	is_valid_var_char(char c)
 {
-    char *result;
-    char *var_name;
-    char *var_value;
-    int i;
-    
-    if (!str || !ft_strchr(str, '$'))
-        return ft_strdup(str);
-    
-    if (str[0] == '$')
-    {
-        // ft_isalnum nzidoha
-        i = 1;
-        // while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-		while (str[i] && ((str[i] >= 'a' && str[i] <= 'z') || 
-                  (str[i] >= 'A' && str[i] <= 'Z') || 
-                  (str[i] >= '0' && str[i] <= '9') || 
-                  str[i] == '_'))
-            i++;
-        
-        var_name = malloc(i);
-        ft_strncpy(var_name, str + 1, i - 1);
-        var_name[i - 1] = '\0';
-        
-        // Get value from environment
-        var_value = get_env_value(env, var_name);
-        free(var_name);
-        
-        if (!var_value)
-            return ft_strdup(""); // Return empty if var not found
-        
-        return ft_strdup(var_value);
-    }
-    
-    return ft_strdup(str);
+	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') 
+		|| (c >= '0' && c <= '9') || c == '_');
+}
+
+static char	*extract_var_name(char *str, int *i)
+{
+	char	*var_name;
+	int		start;
+	int		len;
+
+	start = *i + 1;
+	(*i)++;
+	while (str[*i] && is_valid_var_char(str[*i]))
+		(*i)++;
+	len = *i - start;
+	if (len == 0)
+		return (NULL);
+	var_name = malloc(len + 1);
+	if (!var_name)
+		return (NULL);
+	ft_strncpy(var_name, str + start, len);
+	var_name[len] = '\0';
+	return (var_name);
+}
+
+char	*expand_variable(char *str, t_env *env)
+{
+	char	*var_name;
+	char	*var_value;
+	int		i;
+
+	if (!str || !ft_strchr(str, '$'))
+		return (ft_strdup(str));
+	i = 0;
+	if (str[i] == '$')
+	{
+		var_name = extract_var_name(str, &i);
+		if (!var_name)
+			return (ft_strdup(""));
+		var_value = get_env_value(env, var_name);
+		free(var_name);
+		if (!var_value)
+			return (ft_strdup(""));
+		return (ft_strdup(var_value));
+	}
+	return (ft_strdup(str));
 }

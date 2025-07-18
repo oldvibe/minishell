@@ -55,7 +55,7 @@ void		print_tokens(t_token *tokens);
 // Parser functions (to be implemented)
 t_cmd	*init_cmd(void);
 int    	add_arg_to_cmd(t_cmd *cmd, char *arg, t_env *env);
-t_cmd  	*parse_command(t_token **tokens, t_env *env);
+t_cmd	*parse_single_command(t_token **tokens, t_env *env);
 int 	validate_tokens(t_token *tokens);
 t_cmd  	*parse_tokens(t_token *tokens, t_env *env);
 char 	*expand_variable(char *str, t_env *env);
@@ -63,4 +63,5 @@ char 	*get_env_value(t_env *env, char *key);
 int		handle_redirection(t_cmd *cmd, t_token **myToken);
 void	print_prompt(void);
 void	print_cmd(t_cmd *cmd);
+int		check_syntax(t_token *tokens);
 #endif

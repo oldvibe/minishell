@@ -1,18 +1,39 @@
 #include "../../include/minishell.h"
 
+static char	*append_char(char *str, char c, int *len)
+{
+	char	*new_str;
+	int		i;
+
+	new_str = malloc(*len + 2);
+	if (!new_str)
+		return (NULL);
+	i = 0;
+	while (i < *len)
+	{
+		new_str[i] = str[i];
+		i++;
+	}
+	new_str[*len] = c;
+	new_str[*len + 1] = '\0';
+	free(str);
+	(*len)++;
+	return (new_str);
+}
+
 char	*read_word(t_lexer *lexer)
 {
-	int		start;
-	char	quote;
-	int		i;
-	char	c;
+	char	*result;
 	int		len;
-	char	*word;
+	char	quote;
+	char	c;
 
-	start = lexer->pos;
+	result = malloc(1);
+	if (!result)
+		return (NULL);
+	result[0] = '\0';
+	len = 0;
 	quote = 0;
-	i = 0;
-	// calculate the len excluding the quotes
 	while (lexer->pos < lexer->len)
 	{
 		c = lexer->input[lexer->pos];
@@ -30,15 +51,14 @@ char	*read_word(t_lexer *lexer)
 		}
 		if (!quote && is_special_char(c))
 			break ;
+		result = append_char(result, c, &len);
+		if (!result)
+			return (NULL);
 		lexer->pos++;
 	}
-	len = lexer->pos - start;
-	word = malloc(len + 1);
-	if (!word)
-		return (NULL);
-	ft_strncpy(word, lexer->input + start, len);
-	word[len] = '\0';
-	return (word);
+	if (quote != 0)
+		return (free(result), NULL);
+	return (result);
 }
 
 t_token	*create_token(t_token_type type, char *value)
@@ -57,23 +77,11 @@ t_token	*create_token(t_token_type type, char *value)
 	return (token);
 }
 
-
-t_token	*get_next_token(t_lexer *lexer)
+static t_token	*handle_redirect_tokens(t_lexer *lexer)
 {
 	char	c;
-	char	*word;
 
-	skip_whitespace(lexer);
-	if (lexer->pos >= lexer->len)
-		return (create_token(TOKEN_EOF, NULL));
 	c = lexer->input[lexer->pos];
-	// Handle pipes
-	if (c == '|')
-	{
-		lexer->pos++;
-		return (create_token(TOKEN_PIPE, "|"));
-	}
-	// Handle redirections
 	if (c == '<')
 	{
 		if (lexer->pos + 1 < lexer->len && lexer->input[lexer->pos + 1] == '<')
@@ -94,10 +102,35 @@ t_token	*get_next_token(t_lexer *lexer)
 		lexer->pos++;
 		return (create_token(TOKEN_REDIRECT_OUT, ">"));
 	}
-	// Handle words (qoutes dakhlin)
+	return (NULL);
+}
+
+t_token	*get_next_token(t_lexer *lexer)
+{
+	char	c;
+	char	*word;
+	t_token	*token;
+
+	skip_whitespace(lexer);
+	if (lexer->pos >= lexer->len)
+		return (create_token(TOKEN_EOF, NULL));
+	c = lexer->input[lexer->pos];
+	if (c == '|')
+	{
+		lexer->pos++;
+		return (create_token(TOKEN_PIPE, "|"));
+	}
+	token = handle_redirect_tokens(lexer);
+	if (token)
+		return (token);
 	word = read_word(lexer);
 	if (!word)
 		return (NULL);
+	if (ft_strlen(word) == 0)
+	{
+		free(word);
+		return (get_next_token(lexer));
+	}
 	return (create_token(TOKEN_WORD, word));
 }
 
@@ -114,7 +147,6 @@ t_lexer	*init_lexer(char *input)
 	return (lexer);
 }
 
-// Tokenize from dakchi lijay mn linput
 t_token	*tokenize(char *input)
 {
 	t_lexer	*lexer;
@@ -127,8 +159,11 @@ t_token	*tokenize(char *input)
 		return (NULL);
 	tokens = NULL;
 	current = NULL;
-	while ((token = get_next_token(lexer)) && token->type != TOKEN_EOF)
+	while (1)
 	{
+		token = get_next_token(lexer);
+		if (!token)
+			break ;
 		if (!tokens)
 		{
 			tokens = token;
@@ -139,7 +174,10 @@ t_token	*tokenize(char *input)
 			current->next = token;
 			current = token;
 		}
+		if (token->type == TOKEN_EOF)
+			break ;
 	}
 	free(lexer);
 	return (tokens);
 }
+

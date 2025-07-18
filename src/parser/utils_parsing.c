@@ -23,3 +23,52 @@ void	print_prompt(void)
 								"\033[0m\n";
 	printf("%s\n", g_prompt_art);
 }
+
+int	check_syntax(t_token *tokens)
+{
+	t_token	*current;
+	int		pipe_count;
+	int		expect_command;
+
+	current = tokens;
+	pipe_count = 0;
+	expect_command = 1;
+	
+	while (current && current->type != TOKEN_EOF)
+	{
+		if (current->type == TOKEN_PIPE)
+		{
+			if (expect_command)
+			{
+				printf("minishell: syntax error near unexpected token `|'\n");
+				return (0);
+			}
+			pipe_count++;
+			expect_command = 1;
+		}
+		else if (current->type == TOKEN_WORD)
+		{
+			expect_command = 0;
+		}
+		else if (current->type >= TOKEN_REDIRECT_IN && 
+				current->type <= TOKEN_HEREDOC)
+		{
+			if (!current->next || current->next->type != TOKEN_WORD)
+			{
+				printf("minishell: syntax error near unexpected token\n");
+				return (0);
+			}
+			current = current->next; // Skip filename
+		}
+		current = current->next;
+	}
+	
+	if (expect_command)
+	{
+		printf("minishell: syntax error: unexpected end of input\n");
+		return (0);
+	}
+	
+	return (1);
+}
+

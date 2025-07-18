@@ -2,12 +2,18 @@
 
 void	free_cmd(t_cmd *cmd)
 {
+	int	i;
+
 	if (!cmd)
 		return ;
 	if (cmd->args)
 	{
-		for (int i = 0; cmd->args[i]; i++)
+		i = 0;
+		while (cmd->args[i])
+		{
 			free(cmd->args[i]);
+			i++;
+		}
 		free(cmd->args);
 	}
 	if (cmd->input_file)
@@ -19,24 +25,24 @@ void	free_cmd(t_cmd *cmd)
 	free(cmd);
 }
 
-void free_cmd_list(t_cmd *cmd_list)
+void	free_cmd_list(t_cmd *cmd_list)
 {
-    t_cmd *current = cmd_list;
-    t_cmd *next;
-    
-    while (current)
-    {
-        next = current->next;
-        free_cmd(current);
-        current = next;
-    }
+	t_cmd	*current;
+	t_cmd	*next;
+
+	current = cmd_list;
+	while (current)
+	{
+		next = current->next;
+		free_cmd(current);
+		current = next;
+	}
 }
 
-// hada lexer (free list)
 void	free_tokens(t_token *token)
 {
-	t_token *current;
-	t_token *next;
+	t_token	*current;
+	t_token	*next;
 
 	current = token;
 	while (current)
