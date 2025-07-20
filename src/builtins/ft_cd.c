@@ -1,6 +1,6 @@
 #include "../../include/minishell.h"
 
-void    cd(t_cmd *cmd)
+void    ft_cd(t_cmd *cmd)
 {
     char *path;
     char cwd[1024];

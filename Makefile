@@ -1,5 +1,5 @@
 CC = cc
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -lreadline
 
 NAME =  minishell
 PRINTF = src/utils/ft_printf/printf.a
