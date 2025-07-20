@@ -1,6 +1,7 @@
 #ifndef PARSER_H
 # define PARSER_H
 
+// # include "minishell.h"
 struct s_env;
 typedef struct s_env t_env;
 
@@ -29,15 +30,15 @@ typedef struct s_lexer
 	int				len;
 }					t_lexer;
 
-// Command structure for parsed commands
+
 typedef struct s_cmd
 {
 	char **args;             
 	char *input_file;        
 	char *output_file;      
-	int append_mode;         // for >> (1 = append, 0 = overwrite)
-	char *heredoc_delimiter; // for << redirection
-	struct s_cmd *next;      // for pipes
+	int append_mode;        
+	char *heredoc_delimiter; 
+	struct s_cmd *next; 
 }					t_cmd;
 
 // Lexer functions

@@ -8,9 +8,9 @@ int check_flag(char *arg)
     i = 0;
     if(arg[i] != '-')
         return(0);
-    while (arg[i], arg[i] == '-')
+    while (arg[i] && arg[i] == '-')
     {
-        while (arg[i + 1], arg[i + 1] == 'n')
+        while (arg[i + 1] && arg[i + 1] == 'n')
         {
             i++;
         }
@@ -22,7 +22,7 @@ int check_flag(char *arg)
     
 }
 
-void echo(t_cmd *cmds)
+void ft_echo(t_cmd *cmds)
 {
     int i;
     int new_line;
