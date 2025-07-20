@@ -7,3 +7,4 @@ int check_if_builtin(char *cmd)
 			!ft_strcmp(cmd, "pwd") ||
 			!ft_strcmp(cmd, "exit"));
 }
+ 

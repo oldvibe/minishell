@@ -16,12 +16,12 @@ static int	execute_builtin(t_cmd *cmd)
 	}
 	if (ft_strcmp(cmd->args[0], "cd") == 0)
 	{
-		ft_cd(cmd->args);
+		// ft_cd(cmd->args);
 		return (1);
 	}
 	if (ft_strcmp(cmd->args[0], "echo") == 0)
 	{
-		ft_echo(cmd->args);
+		// ft_echo(cmd->args);
 		return (1);
 	}
 	return (0);
