@@ -1,6 +1,6 @@
 #include "../include/minishell.h"
 
-static int	execute_builtin(t_cmd *cmd)
+static int	execute_builtin(t_cmd *cmd, t_env *env_list)
 {
 	if (!cmd->args || !cmd->args[0])
 		return (0);
@@ -24,16 +24,21 @@ static int	execute_builtin(t_cmd *cmd)
 		ft_echo(cmd);
 		return (1);
 	}
+	if (ft_strcmp(cmd->args[0], "env") == 0)
+	{
+		ft_env(cmd->args, env_list);
+		return (1);
+	}
 	return (0);
 }
 
-static void	execute_command(t_cmd *cmd, char **envp)
+static void	execute_command(t_cmd *cmd, char **envp, t_env *env_li)
 {
 	pid_t	pid;
 
 	if (!cmd->args || !cmd->args[0])
 		return ;
-	if (execute_builtin(cmd))
+	if (execute_builtin(cmd, env_li))
 		return ;
 	pid = fork();
 	if (pid == 0)
@@ -76,7 +81,7 @@ static int	process_input(char *input, t_env *env, char **envp)
 		free_tokens(tokens);
 		return (1);
 	}
-	execute_command(cmds, envp);
+	execute_command(cmds, envp, env);
 	free_cmd_list(cmds);
 	free_tokens(tokens);
 	return (0);
