@@ -12,7 +12,7 @@ OBJ = $(SRC:.c=.o)
 
 CC = cc
 
-FLGS = -Wall -Wextra -Werror
+FLGS = -Wall -Wextra -Werror -lreadline
 
 RM = rm -f
 
@@ -21,6 +21,8 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	ar rcs $(NAME) $(OBJ)
 
+%.o: %.c
+	$(CC) $(FLGS) -c $< -o $@
 clean :
 	$(RM) $(OBJ)
 
@@ -29,7 +31,5 @@ fclean : clean
 
 re : fclean all
 
-%.o: %.c
-	$(CC) $(FLGS) -c $< -o $@
 
 .PHONY : all clean fclean re

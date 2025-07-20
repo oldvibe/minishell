@@ -1,15 +1,15 @@
 #include "../include/minishell.h"
 
-int	ft_builtin_exit(t_cmd *cmds)
-{
-	if (ft_strcmp(cmds->args[0], "exit") == 0)
-	{
-		write_history(".minishell_history");
-		ft_exit(cmds->args);
-		return (1);
-	}
-	return (0);
-}
+// int	ft_builtin_exit(t_cmd *cmds)
+// {
+// 	if (ft_strcmp(cmds->args[0], "exit") == 0)
+// 	{
+// 		write_history(".minishell_history");
+// 		ft_exit(cmds->args);
+// 		return (1);
+// 	}
+// 	return (0);
+// }
 
 int	main(int ac, char **av, char **envp)
 {
@@ -21,7 +21,7 @@ int	main(int ac, char **av, char **envp)
 
 	(void)ac;
 	(void)av;
-	env = dup_env(envp);
+	// env = dup_env(envp);
 	if (!env)
 		return (1);
 	read_history(".minishell_history");
@@ -53,8 +53,8 @@ int	main(int ac, char **av, char **envp)
 		}
 		if (cmds->args[0])
 		{
-			if (ft_builtin_exit(cmds))
-				break;
+			// if (ft_builtin_exit(cmds))
+			// 	break;
 			pid = fork();
 			if (pid == 0)
 			{
@@ -69,6 +69,6 @@ int	main(int ac, char **av, char **envp)
 		free(input);
 	}
 	write_history(".minishell_history");
-	free_env(env);
+	// free_env(env);
 	return (0);
 }

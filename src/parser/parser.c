@@ -27,7 +27,7 @@ char *get_env_value(t_env *env, char *key)
         current = current->next;
     }
     return NULL;
-}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
+}
 
 char *expand_variable(char *str, t_env *env)
 {

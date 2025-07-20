@@ -5,3 +5,5 @@
 ==342==    by 0x109815: tokenize (in /home/ykebieb/Desktop/now/my/mninishell/minishell)
 ==342==    by 0x109254: main (in /home/ykebieb/Desktop/now/my/mninishell/minishell
 
+
+///// 
