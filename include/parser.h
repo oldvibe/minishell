@@ -15,6 +15,12 @@ typedef enum
 	TOKEN_HEREDOC,         
 	TOKEN_EOF
 }					t_token_type;
+typedef enum
+{
+	OPEN_RED,
+	CLOSE_RED
+
+} 			redire_status;
 
 typedef struct s_token
 {
@@ -30,16 +36,28 @@ typedef struct s_lexer
 	int				len;
 }					t_lexer;
 
+// typedef struct s_redir
+// {
+// 	int	i_o; 
+// 	char *file_name;
+// 	char *next;
+// }					t_redir;
+
+
+
 
 typedef struct s_cmd
 {
 	char **args;             
-	char *input_file;        
-	char *output_file;      
+	char *input_file;
+	/// linked list redire
+	int status;
+	char *output_file;     
 	int append_mode;        
 	char *heredoc_delimiter; 
 	struct s_cmd *next; 
 }					t_cmd;
+
 
 // Lexer functions
 t_lexer		*init_lexer(char *input);

@@ -20,11 +20,12 @@ void    remove_env(char *name, t_env **envi)
         if(!ft_strcmp(name,current->key))
         {
             prev->next =current->next;
-            return;
+            return 0;
         }
         prev = current;
         current = current->next;
     }
+    return 1;
     
 }
 

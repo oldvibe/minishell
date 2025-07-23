@@ -3,7 +3,7 @@
 void update_env(char *arg, t_env **envi)
 {
     char *name;
-    char *value;
+    char *valuee;
     int i;
     i = 0;
     t_env *current;
@@ -12,62 +12,71 @@ void update_env(char *arg, t_env **envi)
     while(arg[i] && arg[i]!= '=')
         i++;
     name = ft_substr(arg, 0, i);
+    if(!name)
+        exit(1);
     if (arg[i] == '=' && arg[i + 1])
     {
-        value = ft_strdup(arg + i + 1);
-
+        valuee = ft_strdup(arg + i + 1);
     }
     else if(arg[i] == '=' && !arg[i+ 1])
-        value = ft_strdup("");
+        valuee = ft_strdup("");
     else
-        value = NULL;
-    while (current)
+        valuee = NULL;
+    while (current->next)
     {
         if(!strcmp(current->key, name))
         {
-            current->value;
+            current->value = valuee;
             return;
         }
         current = current->next;
     }
+    if(!strcmp(current->key, name))
+    {
+        current->value = valuee;
+        return;
+    }
+    else{
 
-    t_env *new = malloc(sizeof(t_env));
-    new->key = name;
-    new->value = value;
-    new->next = *envi;
-    *envi =new;
+        t_env *new = malloc(sizeof(t_env));
+        new->key = name;
+        new->value = valuee;
+        current->next = new;
+        new->next = NULL;
+    }
     return;
 
 
 }
 
-void    check_arg(char *arg)
+int    check_arg(char *arg)
 {
     int i;
     i=1;
-    if(arg[0] != '_' && !ft_isalpha(arg[0]))
+    if(arg[0] != '_' && !isalpha(arg[0]))
     {
         printf("'%s': not a valid identifier", arg);
-        exit(1);
+        return(1);
     }
     while(arg[i] && arg[i]!= '=')
     {
-        if(arg[i] != '_' && !ft_isdigit(arg[i]) && !ft_isalpha(arg[i]))
+        if(arg[i] != '_' && !isdigit(arg[i]) && !isalpha(arg[i]))
         {
             printf("'%s': not a valid identifier", arg);
-            exit(1);
+            return(1);
         }
         i++; 
     }
+    return 0; 
 
 }
 
 
-void    ft_export(char **args, t_env **envi)
+int    ft_export(char **args, t_env **envi)
 {
     t_env *current = *envi;
     int i;
-    i = 2;
+    i = 1;
     if(!args[1])
     {
         while (current)
@@ -80,19 +89,13 @@ void    ft_export(char **args, t_env **envi)
     {
         while (args[i])
         { 
-            check_arg(args[i]);
+            if(check_arg(args[i]))
+                return 1;
             update_env(args[i], envi);
             i++;
         }
         
         
     }
-}
-
-
-int main(int ac, char **av,char **envp)
-{
-    t_env *env;
-    env = dup_env(envp);
-    ft_export(av, &env);
+    return 0;
 }

@@ -1,6 +1,6 @@
 #include "../../include/minishell.h"
 
-void    ft_cd(t_cmd *cmd)
+int    ft_cd(t_cmd *cmd)
 {
     char *path;
     char cwd[1024];
@@ -16,8 +16,9 @@ void    ft_cd(t_cmd *cmd)
     if(chdir(path) != 0)
     {
         printf("CHANGING DIRECTORY FAILED!!");
-        return;
+        return 1;
     }
+    return 0;
     // if (getcwd(cwd, sizeof(cwd)))
     // {
     //     printf("CURRENT IS : %s\n",cwd);

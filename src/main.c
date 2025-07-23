@@ -2,6 +2,7 @@
 
 static int	execute_builtin(t_cmd *cmd, t_env *env_list)
 {
+
 	if (!cmd->args || !cmd->args[0])
 		return (0);
 	if (ft_strcmp(cmd->args[0], "exit") == 0)
@@ -11,46 +12,88 @@ static int	execute_builtin(t_cmd *cmd, t_env *env_list)
 	}
 	if (ft_strcmp(cmd->args[0], "pwd") == 0)
 	{
-		ft_pwd(cmd->args);
+		cmd->status = ft_pwd(cmd->args);
 		return (1);
 	}
 	if (ft_strcmp(cmd->args[0], "cd") == 0)
 	{
-		ft_cd(cmd);
+		cmd->status = ft_cd(cmd);
 		return (1);
 	}
 	if (ft_strcmp(cmd->args[0], "echo") == 0)
 	{
-		ft_echo(cmd);
+		 cmd->status = ft_echo(cmd);
 		return (1);
 	}
 	if (ft_strcmp(cmd->args[0], "env") == 0)
 	{
-		ft_env(cmd->args, env_list);
+		cmd->status = ft_env(cmd->args, env_list);
+		return (1);
+	}
+	if (ft_strcmp(cmd->args[0], "export") == 0)
+	{
+		cmd->status = ft_export(cmd->args, &env_list);
 		return (1);
 	}
 	return (0);
 }
 
+
+
+// single execute:
+
+// fork for child process:
+	// handle_redire < > >> if faild exit with 1 and print error using perror(file_name);
+	// check if is NULL exit normal.
+	// empty string (print command not found) and exit with 127;
+	// get_path but check if command have / that mean user give you absolute path
+	// check if absolute path is exist printf no such file or directory exit with 127.
+	// check if is a directory (print is a directory) exit with 126.
+	// give it to exceve if faild print permission denied exit with 126.
+	// if user give you just relative path like (ls,cat...).
+	// go find it absolute path in environment exectly varible call PATH.
+	// if it not exist or empty string print command not found and exit 127.
+	// split it with : and join /command to check if exist and make sure is executable if not just save one path that are exist.
+	// if not exist print command not found and exit with 127;
+	// return (path) execve and if faild print permission denied. 
+
 static void	execute_command(t_cmd *cmd, char **envp, t_env *env_li)
 {
 	pid_t	pid;
+	int tmpin;
+	int tmpout;
 
-	if (!cmd->args || !cmd->args[0])
-		return ;
-	if (execute_builtin(cmd, env_li))
-		return ;
-	pid = fork();
-	if (pid == 0)
+	
+	if(!cmd->next && is_built(cmd->args)) // check if it buitlin 
 	{
-		execve(cmd->args[0], cmd->args, envp);
-		perror(cmd->args[0]);
-		exit(EXIT_FAILURE);
+		if(!cmd->input_file)
+		{
+			tmpin = dup(0);
+			tmpout = dup(1);
+			handle_redir(cmd,OPEN_RED, tmpin, tmpout);
+
+		}
+		execute_builtin(cmd,env_li);
+		handle_redir(cmd,OPEN_RED, tmpin, tmpout);
+		// save stdin --> dup(0);
+		// save stdout ---> dup (1);
+		// handle_redir ---> < > >>
+		// execute_builtin;
+		// return stdin dup2(old fd , new fd(0));
+		// return stdout dup2(old fd, new fd (1));
+		// close(tmp-fd--> stdin);
+		// close (tmp-fd--> stdout);
 	}
-	else if (pid > 0)
-		waitpid(pid, NULL, 0);
-	else
-		perror("fork");
+	else if(!cmd->next)
+	{
+		pid = fork();
+		if(!pid)
+		{
+			execute_c
+		}
+		else
+		wait();
+	}
 }
 
 static int	process_input(char *input, t_env *env, char **envp)

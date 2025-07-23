@@ -10,6 +10,7 @@ t_cmd	*init_cmd(void)
 	cmd->args = NULL;
 	cmd->input_file = NULL;
 	cmd->output_file = NULL;
+	cmd->status = 0;
 	cmd->append_mode = 0;
 	cmd->heredoc_delimiter = NULL;
 	cmd->next = NULL;
