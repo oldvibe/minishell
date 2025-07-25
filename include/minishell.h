@@ -14,6 +14,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <sys/wait.h>
+#include <sys/stat.h>
 # include <unistd.h>
 
 typedef struct s_env
@@ -35,5 +36,17 @@ void				print_env(t_env *env);
 void	free_cmd(t_cmd *cmd);
 void 	free_cmd_list(t_cmd *cmd_list);
 void	free_tokens(t_token *token); //hada lexer
+
+
+//execution
+
+void exec_non_builtin(t_cmd *cmd, char **env);
+int is_built(char **args);
+void	handle_redir(t_cmd *cmd, redire_status status, int tmpin, int tmpout);
+char **et_path(char **envi);
+ void check_absolu_path(char **args, char **env);
+
+
+
 
 #endif

@@ -89,7 +89,7 @@ static void	execute_command(t_cmd *cmd, char **envp, t_env *env_li)
 		pid = fork();
 		if(!pid)
 		{
-			execute_c
+			exec_non_builtin(cmd, envp);
 		}
 		else
 		wait();

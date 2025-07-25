@@ -1,5 +1,5 @@
 #include "../../include/minishell.h"
-
+#include <sys/stat.h>
 int is_built(char **args)
 {
     if (!args || !args[0])
@@ -111,3 +111,44 @@ void	handle_redir(t_cmd *cmd, redire_status status, int tmpin, int tmpout)
 	}
 	
 }
+
+
+char **get_path(char **envi)
+{
+	char *path
+	int	i;
+	i =0;
+	while (envi[i])
+	{
+		if(!ft_strncmp("PATH=", envi[i], 5))
+		{
+			path = ft_strchr(envi[i], /);
+			return(ft_split(path, ':'));
+		}
+		i++;
+	}
+	return (NULL);
+}
+ void check_absolu_path(char **args, char **env)
+ {
+	struct stat sb;
+	
+	stat(args[0], &sb);
+	if(access(args[0], F_OK))
+	{
+		perror(arg[0]);
+		exit(127)
+	}
+	if (S_ISDIR(sb.st_mode))
+	{
+		printf("%s is a directory", args[0]);
+		exit(126);
+	}
+	if(execve(args[0],args, env))
+	{
+		perror("permission denied\n")
+		exit(126);
+	}
+
+
+ }
