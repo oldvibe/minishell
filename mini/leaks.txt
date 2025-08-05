@@ -1,0 +1,7 @@
+==342== 3 bytes in 1 blocks are definitely lost in loss record 2 of 79
+==342==    at 0x48407B4: malloc (vg_replace_malloc.c:381)
+==342==    by 0x1094D5: read_word (in /home/ykebieb/Desktop/now/my/mninishell/minishell)
+==342==    by 0x10977B: get_next_token (in /home/ykebieb/Desktop/now/my/mninishell/minishell)
+==342==    by 0x109815: tokenize (in /home/ykebieb/Desktop/now/my/mninishell/minishell)
+==342==    by 0x109254: main (in /home/ykebieb/Desktop/now/my/mninishell/minishell
+
