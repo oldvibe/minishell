@@ -1,8 +1,6 @@
 #include "../../include/minishell.h"
 #include "../../include/gc.h"
 
-// Reads heredoc content until delimiter is found.
-// If expand is 1, expands variables using expand_variable.
 char *read_heredoc(const char *delimiter, int expand, t_env *env, t_gc *gc)
 {
     char	*line;

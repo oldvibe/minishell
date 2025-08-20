@@ -10,7 +10,6 @@ SRCS =  src/main.c \
 		src/parser/utils_parsing.c \
 		src/parser/expand.c \
 		src/parser/handle_redirection.c \
-		src/builtins/builtins.c \
 		src/builtins/ft_cd.c \
 		src/builtins/ft_echo.c \
 		src/builtins/ft_exit.c \
@@ -42,7 +41,6 @@ SRCS =  src/main.c \
 		src/excution/dup_env.c \
 		src/excution/execution.c \
 		src/excution/exec_utils.c \
-		src/parser/debugge.utils.c
 
 OBJS = $(SRCS:.c=.o)
 

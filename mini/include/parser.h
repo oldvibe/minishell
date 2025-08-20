@@ -83,7 +83,6 @@ char 	*expand_variable(char *str, t_env *env, t_gc *gc);
 char 	*get_env_value(t_env *env, char *key);
 int		handle_redirection(t_cmd *cmd, t_token **myToken, t_gc *gc);
 void	print_prompt(void);
-void	print_cmd(t_cmd *cmd);
 int		check_syntax(t_token *tokens);
 // Heredoc reading
 char	*read_heredoc(const char *delimiter, int expand, t_env *env, t_gc *gc);

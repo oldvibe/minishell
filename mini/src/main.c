@@ -114,14 +114,13 @@ int	main(int ac, char **av, char **envp)
 {
 	t_env	*env;
 	char	*input;
-	t_gc	gc_instance = {0}; // Initialize GC
+	t_gc	gc_instance = {0};
 
 	(void)ac;
 	(void)av;
 	env = dup_env(envp);
 	if (!env)
 		return (1);
-	read_history(".minishell_history");
 	print_prompt();
 	while (1)
 	{
@@ -143,7 +142,6 @@ int	main(int ac, char **av, char **envp)
 		free(input);
 		// gc_free_all(&gc_instance); // Free all allocations after each input
 	}
-	write_history(".minishell_history");
 	free_env(env);
 	return (0);
 }
