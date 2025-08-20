@@ -29,9 +29,14 @@ int	execute_builtin(t_cmd *cmd, t_env *env_list)
 		ft_env(cmd->args, env_list);
 		return (1);
 	}
-		if (ft_strcmp(cmd->args[0], "export") == 0)
+	if (ft_strcmp(cmd->args[0], "export") == 0)
 	{
 		ft_export(cmd->args, &env_list);
+		return (1);
+	}
+	if (ft_strcmp(cmd->args[0], "unset") == 0)
+	{
+		ft_unset(cmd->args, &env_list);
 		return (1);
 	}
 	return (0);

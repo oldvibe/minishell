@@ -74,7 +74,6 @@ int	handle_redirection(t_cmd *cmd, t_token **my_token, t_gc *gc)
                 return (0);
         }
 
-        // If we allocated a new filename, free it
         if ((filename[0] == '\'' || filename[0] == '\"') &&
             filename[strlen(filename) - 1] == filename[0])
             free(filename);
