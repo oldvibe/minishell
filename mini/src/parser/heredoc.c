@@ -23,7 +23,7 @@ char *read_heredoc(const char *delimiter, int expand, t_env *env, t_gc *gc)
         }
         if (expand)
         {
-            char *expanded = expand_variable(line, env);
+            char *expanded = expand_variable(line, env, gc);
             free(line);
             line = expanded;
         }
@@ -42,6 +42,6 @@ char *read_heredoc(const char *delimiter, int expand, t_env *env, t_gc *gc)
         free(line);
         len += line_len + 1;
     }
-    gc_free_all(&your_gc_instance);
+    gc_free_all(&gc);
     return content;
 }
